@@ -8,19 +8,28 @@
 import SwiftUI
 
 struct RatingView: View {
+    @Binding var rating: Int
+    let maximumRating: Int = 5
+    
+    let onColor = Color.red
+    let offColor = Color.gray
+    
     var body: some View {
-        
         //creates the rating look, made of five ecg icons
         HStack {
-            ForEach(/*@START_MENU_TOKEN@*/0 ..< 5/*@END_MENU_TOKEN@*/) { _ in
+            ForEach(1 ..< maximumRating + 1, id: \.self) { index in
                 Image(systemName: "waveform.path.ecg")
-                    .foregroundColor(.gray)
-                    .font(.largeTitle)
+                    .foregroundColor(
+                        index > rating ? offColor : onColor)
+                    .onTapGesture {
+                        rating = index
+                    }
             }
         }
+        .font(.largeTitle)
     }
 }
 
 #Preview {
-    RatingView()
+    RatingView(rating: .constant(3))
 }

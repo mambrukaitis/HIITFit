@@ -9,6 +9,9 @@ import SwiftUI
 
 struct ExerciseView: View {
     @Binding var selectedTab: Int
+    @State private var rating = 0
+    @State var showHistory: Bool = false
+    @State private var showSuccess: Bool = false
     //index variable for the exercise name arrays
     let index: Int
     
@@ -27,7 +30,11 @@ struct ExerciseView: View {
     }
     var doneButton: some View {
         Button("Done") {
-            selectedTab = lastExercise ? 9 : selectedTab + 1
+            if lastExercise {
+                showSuccess.toggle()
+            } else {
+                selectedTab += 1
+            }
         }
     }
     
@@ -37,8 +44,11 @@ struct ExerciseView: View {
             VStack {
                 
                 //header
-                HeaderView(titleText: exercise.exerciseName)
-                    .padding(.bottom)
+                HeaderView(
+                    selectedTab: $selectedTab,
+                    titleText: Exercise.exercises[index].exerciseName
+                )
+                .padding(.bottom)
                 
                 //video player
                 VideoPlayerView(videoName: exercise.videoName)
@@ -48,29 +58,38 @@ struct ExerciseView: View {
                 Text(Date().addingTimeInterval(interval), style: .timer)
                     .font(.system(size: geometry.size.height * 0.07))
                 
-                //start/done button
+                //done button
                 HStack(spacing: 150) {
                     startButton
                     doneButton
+                        .sheet(isPresented: $showSuccess) {
+                            SuccessView(selectedTab: $selectedTab)
+                                .presentationDetents([.medium, .large])
+                        }
                 }
                 .font(.title3)
                 .padding()
                 
                 //rating
-                RatingView()
+                RatingView(rating: $rating)
                     .padding()
                 
                 //history button
                 Spacer()
-                Button("History") {}
-                    .padding(.bottom)
+                Button("History") {
+                    showHistory.toggle()
+                }
+                .sheet(isPresented: $showHistory) {
+                    HistoryView(showHistory: $showHistory)
+                }
+                .padding(.bottom)
             }
         }
     }
 }
 
 #Preview {
-    ExerciseView(selectedTab: .constant(1), index: 1)
+    ExerciseView(selectedTab: .constant(1), index: 3)
 }
 
 
