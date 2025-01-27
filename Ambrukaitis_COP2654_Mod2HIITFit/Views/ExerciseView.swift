@@ -8,17 +8,27 @@
 import SwiftUI
 
 struct ExerciseView: View {
-    //arrays for the exercise video names
-    let videoNames = ["squat", "step-up", "burpee", "sun-salute"]
-    let exerciseNames = ["Squat", "Step Up", "Burpee", "Sun Salute"]
-    
+    //index variable for the exercise name arrays
     let index: Int
     
+    var exercise: Exercise {
+        Exercise.exercises[index]
+    }
+    
     var body: some View {
-        Text(exerciseNames[index])
+        VStack {
+            HeaderView(exerciseName: exercise.exerciseName)
+            Text("Video Player")
+            Text("Timer")
+            Text("Start/Done button")
+            Text("Rating")
+            Text("History button")
+        }
     }
 }
 
 #Preview {
     ExerciseView(index: 0)
 }
+
+
