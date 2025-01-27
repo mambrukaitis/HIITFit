@@ -15,14 +15,37 @@ struct ExerciseView: View {
         Exercise.exercises[index]
     }
     
+    let interval: TimeInterval = 30
     var body: some View {
-        VStack {
-            HeaderView(exerciseName: exercise.exerciseName)
-            Text("Video Player")
-            Text("Timer")
-            Text("Start/Done button")
-            Text("Rating")
-            Text("History button")
+        GeometryReader { geometry in
+            VStack {
+                
+                //header
+                HeaderView(exerciseName: exercise.exerciseName)
+                    .padding(.bottom)
+                
+                //video player
+                VideoPlayerView(videoName: exercise.videoName)
+                    .frame(height: geometry.size.height * 0.45)
+                
+                //timer
+                Text(Date().addingTimeInterval(interval), style: .timer)
+                    .font(.system(size: geometry.size.height * 0.07))
+                
+                //start/done button
+                Button("Start/Done") {}
+                    .font(.title3)
+                    .padding()
+                
+                //rating
+                RatingView()
+                    .padding()
+                
+                //history button
+                Spacer()
+                Button("History") {}
+                    .padding(.bottom)
+            }
         }
     }
 }
