@@ -12,6 +12,7 @@ struct ExerciseView: View {
     @State private var rating = 0
     @State var showHistory: Bool = false
     @State private var showSuccess: Bool = false
+    @EnvironmentObject var history: HistoryStore
     //index variable for the exercise name arrays
     let index: Int
     
@@ -39,6 +40,7 @@ struct ExerciseView: View {
             } else {
                 selectedTab += 1
             }
+            history.addDoneExercise(Exercise.exercises[index].exerciseName)
         }
     }
     
@@ -99,7 +101,8 @@ struct ExerciseView: View {
 }
 
 #Preview {
-    ExerciseView(selectedTab: .constant(3), index: 3)
+    ExerciseView(selectedTab: .constant(0), index: 0)
+        .environmentObject(HistoryStore())
 }
 
 
