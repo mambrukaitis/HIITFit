@@ -9,7 +9,6 @@ import SwiftUI
 
 struct ExerciseView: View {
     @Binding var selectedTab: Int
-    @State private var rating = 0
     @State var showHistory: Bool = false
     @State private var showSuccess: Bool = false
     @EnvironmentObject var history: HistoryStore
@@ -84,7 +83,7 @@ struct ExerciseView: View {
                 Spacer()
                 
                 //rating
-                RatingView(rating: $rating)
+                RatingView(exerciseIndex: index)
                     .padding()
                 
                 //history button
