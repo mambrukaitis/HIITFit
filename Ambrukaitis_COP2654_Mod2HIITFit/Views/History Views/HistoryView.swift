@@ -35,9 +35,17 @@ import SwiftUI
 struct HistoryView: View {
   @EnvironmentObject var history: HistoryStore
   @Binding var showHistory: Bool
+    @State private var addMode = false
 
   var headerView: some View {
     HStack {
+        Button {
+            addMode = true
+        } label: {
+            Image(systemName: "plus")
+        }
+        .padding()
+        EditButton()
       Spacer()
       Text("History")
         .font(.title)
@@ -52,8 +60,13 @@ struct HistoryView: View {
   }
 
   func dayView(day: ExerciseDay) -> some View {
-      Text(day.date.formatted(as: "d MMM YYYY"))
-          .font(.headline)
+      DisclosureGroup {
+          BarChartDayView(day: day)
+              .deleteDisabled(true)
+      } label: {
+          Text(day.date.formatted(as: "d MMM YYY"))
+              .font(.headline)
+      }
   }
 
   func exerciseView(day: ExerciseDay) -> some View {
@@ -65,10 +78,22 @@ struct HistoryView: View {
 
   var body: some View {
     VStack {
-      headerView
+        Group {
+            if addMode {
+                Text("History")
+                    .font(.title)
+            } else {
+                headerView
+            }
+        }
         .padding()
         List($history.exerciseDays, editActions: [.delete]) { $day in
             dayView(day: day)
+        }
+        if addMode {
+            AddHistory(addMode: $addMode)
+                .background(Color.primary.colorInvert())
+                    .shadow(color: .primary.opacity(0.5), radius: 7)
         }
     }
     .onDisappear {

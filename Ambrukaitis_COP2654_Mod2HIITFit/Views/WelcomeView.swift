@@ -8,8 +8,10 @@
 import SwiftUI
 
 struct WelcomeView: View {
+    @EnvironmentObject var HistoryStore: HistoryStore
     @Binding var selectedTab: Int
-    @State var showHistory: Bool = false
+    @State private var showHistory: Bool = false
+    @State private var showReports = false
     
     var getStartedButton: some View {
         RaisedButton(buttonText: "Get Started") {
@@ -31,6 +33,27 @@ struct WelcomeView: View {
             .buttonStyle(EmbossedButtonStyle())
     }
     
+    var reportsButton: some View {
+        Button(
+            action: {
+                showReports = true
+            }, label: {
+                Text("Reports")
+                    .fontWeight(.bold)
+                    .padding([.leading, .trailing], 5)
+            })
+        .padding(.bottom, 10)
+        .buttonStyle(EmbossedButtonStyle())
+    }
+    
+    var buttonHStack: some View {
+        HStack(spacing: 40) {
+            historyButton
+            reportsButton
+        }
+        .padding(10)
+    }
+    
     var body: some View {
         GeometryReader { geometry in
             VStack {
@@ -46,13 +69,13 @@ struct WelcomeView: View {
                             WelcomeView.welcomeText
                             getStartedButton
                             Spacer()
-                            historyButton
+                            buttonHStack
                         }
                         VStack {
                             WelcomeView.welcomeText
                             getStartedButton
                             Spacer()
-                            historyButton
+                            buttonHStack
                         }
                     }
                 }
@@ -60,6 +83,9 @@ struct WelcomeView: View {
             }
             .sheet(isPresented: $showHistory) {
                 HistoryView(showHistory: $showHistory)
+            }
+            .sheet(isPresented: $showReports) {
+                BarChartWeekView()
             }
         }
     }
