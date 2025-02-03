@@ -98,6 +98,8 @@ struct ExerciseView: View {
                 size: geometry.size.height * 0.07)
             }
             Spacer()
+              
+              //rating
             RatingView(exerciseIndex: index)
               .padding()
             historyButton
