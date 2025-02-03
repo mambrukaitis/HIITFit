@@ -49,18 +49,21 @@ struct RatingView: View {
         //creates the rating look, made of five ecg icons
         HStack {
             ForEach(1 ..< maximumRating + 1, id: \.self) { index in
-                Image(systemName: "waveform.path.ecg")
-                    .foregroundColor(
-                        index > rating ? offColor : onColor)
-                    .onTapGesture {
-                        updateRating(index: index)
-                    }
-                    .onAppear {
-                        convertRating()
-                    }
-                    .onChange(of: ratings) {
-                        convertRating()
-                    }
+                Button(action: {
+                    updateRating(index: index)
+                }, label: {
+                    Image(systemName: "waveform.path.ecg")
+                        .foregroundColor(
+                            index > rating ? offColor : onColor)
+                        .font(.body)
+                })
+                .buttonStyle(EmbossedButtonStyle(buttonShape: .round))
+                .onChange(of: ratings) {
+                    convertRating()
+                }
+                .onAppear {
+                    convertRating()
+                }
             }
         }
         .font(.largeTitle)

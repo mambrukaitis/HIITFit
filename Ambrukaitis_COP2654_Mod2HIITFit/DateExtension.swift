@@ -1,4 +1,4 @@
-/// Copyright (c) 2023 Kodeco LLC
+/// Copyright (c) 2022 Kodeco LLC
 /// 
 /// Permission is hereby granted, free of charge, to any person obtaining a copy
 /// of this software and associated documentation files (the "Software"), to deal
@@ -59,5 +59,14 @@ extension Date {
     let dateFormatter = DateFormatter()
     dateFormatter.dateFormat = "EEEE"
     return dateFormatter.string(from: self)
+  }
+
+  var previousSevenDays: [Date] {
+    (-6...0).map { day in
+      Calendar.current.date(
+        byAdding: .day,
+        value: day,
+        to: self) ?? Date()
+    }
   }
 }
